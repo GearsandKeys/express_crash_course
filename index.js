@@ -1,11 +1,25 @@
 const express = require('express');
 const path = require('path');
-const logger = require('./middleware/logger')
+const logger = require('./middleware/logger');
+const exphbs = require('express-handlebars');
+const members = require('./Members');
 
 const app = express();
 
 // Init middleware
 // app.use(logger);
+
+// Handlebars Middleware
+app.engine('handlebars', exphbs({ defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+// Homepage Route (rendering the index.handlebars)
+app.get('/', (req,res) => res.render('index', {
+    title: 'Homepage',
+    members: members
+}));
+//This overwrites the static folder because it is above it in index.js
+//If we switched the static folder and this Homepage route, the static route would load
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));

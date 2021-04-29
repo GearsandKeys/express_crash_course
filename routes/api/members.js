@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
     //add newMember to array
     members.push(newMember); //add new member
     res.json(members); //return all members with the new one
-
+    //res.redirect('/'); //now our form adds a member are redirects to the form instead of return the json
 });
 
 // Update member
@@ -65,6 +65,19 @@ router.put('/:id', (req,res) => {
         });
     } else {
          res.status(400).json({ msg: `No member with the id ${req.params.id} found.`})
+    }
+});
+
+// Delete Member
+router.delete('/:id', (req,res) => {
+    const found = members.some(member => member.id === parseInt(req.params.id));
+
+    if (found) {
+        //filter everything that doesn't match id
+        res.json({ msq: 'Member deleted', members: members.filter(member => member.id !== parseInt(req.params.id))});
+
+    } else {
+        res.status(400).json({ msg: `No member with the id ${req.params.id} found.`})
     }
 });
 
